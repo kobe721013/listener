@@ -1,4 +1,4 @@
-#try to use queue
+#try to use multi-thread to access data
 require 'socket'
 require 'logger'
 
@@ -14,11 +14,9 @@ logger.info("(#{__FILE__},#{__LINE__})"){"start listening..."}
 logger.close
 
 
-count=0
 loop do
-	#Thread.start(server.accept) do |client|
+	Thread.start(server.accept) do |client|
 		
-		client=server.accept
 		begin        
 			# create logger
 			#file = File.open(logFileName, File::WRONLY | File::APPEND | File::CREAT)
@@ -59,3 +57,5 @@ loop do
 			logger.close
         end
 	end
+end
+
