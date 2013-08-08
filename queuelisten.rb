@@ -41,7 +41,7 @@ loop do
 			para = msg.split(',')
                         
                         
-            msg="0810,(#{para[1]}),4,#{t.strftime("%Y/%m/%d-%H:%M:%S")},zeyang,zeyang,/home/TMS/999/Param/0101203709/18400030/,CMDEND"
+            msg="0810,#{para[1]},4,#{t.strftime("%Y/%m/%d-%H:%M:%S")},zeyang,zeyang,/home/TMS/999/Param/0101203709/18400030/,CMDEND"
             client.puts msg
 			
             
