@@ -1,3 +1,4 @@
+#try to use queue
 require 'socket'
 require 'logger'
 
