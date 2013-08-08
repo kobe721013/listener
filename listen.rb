@@ -1,17 +1,48 @@
 #try to use multi-thread to access data
 require 'socket'
 require 'logger'
+require 'mysql'
 
 portNumber=5678
-datetime_format="%Y/%m/%d_%H:%M:%S"
-#time=Time.new.strftime("%Y%m%d")
-#logFileName=time+".log"
+datetime_format="%Y/%m/%d(%H:%M:%S)"
 server = TCPServer.new portNumber
-#puts "listening....."
 logger = Logger.new(Time.new.strftime("%Y%m%d")+".log")
 logger.datetime_format=datetime_format
 logger.info("(#{__FILE__},#{__LINE__})"){"start listening..."}
 logger.close
+
+
+
+
+queue = Queue.new
+
+threadMySQL=Thread.new{
+	puts "new thread for MySQL OK"
+	loop do
+		begin 
+			unless(queue.empty?())
+				con = Mysql.new 'localhost', 'root', '123456', 'Listen'	
+				loop do
+					unless queue.empty?()
+			
+						rs=con.query(queue.pop)
+						sleep(0.5)
+					end
+				end
+		
+			end
+		rescue Mysql::Error => e
+      		puts e.errno
+      		puts e.error
+  
+  		ensure
+      		con.close if con
+  		end
+	end
+	puts "loop finish"
+}
+
+threadMySQL.run
 
 
 loop do
@@ -42,8 +73,11 @@ loop do
                         
             msg="0810,#{para[1]},4,#{t.strftime("%Y/%m/%d-%H:%M:%S")},zeyang,zeyang,/home/TMS/999/Param/0101203709/18400030/,CMDEND"
             client.puts msg
+
+			queue << "insert into event (DateTime,Success,Bank_ID,TID,MID,SN) values('#{t.strftime("%Y%m%d%H%M%S")}',0,822,'26001818','000822018880001','111-222-333')"
 			
-            
+			puts "queue.ize(#{queue.size})"           
+ 
 			logger.info("(#{__FILE__},#{__LINE__})"){"[#{client.peeraddr[2]}]out:(#{msg})"}
 			#logger.info("(#{__FILE__},#{__LINE__})"){"***************************"}
 		rescue Exception => e
