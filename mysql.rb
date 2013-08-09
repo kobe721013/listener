@@ -11,9 +11,9 @@ begin
         puts db
     end
 
-	rs=con.query("Select * from event")
+	rs=con.query("Select * from bank")
 	n_rows=rs.num_rows
-	puts "table event, total rows (#{n_rows})"
+	puts "bank event, total rows (#{n_rows})"
 
 =begin
     n_rows.times do
@@ -23,10 +23,24 @@ begin
 		#puts rs.fetch_row.join("\s")
     end
 =end
+	array=[]
 	rs.each_hash do |row|
-		puts "id:#{row['ID']}"
-
+		#puts "bank id:#{row['Bank_ID']}"
+		array << row
 	end
+	puts "array:#{array}"
+	
+
+	puts "#{(tmp=array.select{|row| row["Bank_ID"].to_i=="0999".to_i}).empty?}, tmp(#{tmp})"
+	response = case
+		when(result=array.select{|row| row["Bank_ID"].to_i=="0999".to_i}.empty?)
+			puts "null"
+		else
+			puts result
+	end
+	#puts "#{array.select{|row| row["Bank_ID"].to_i=="0999".to_i}}"
+
+
 
 
 rescue Mysql::Error => e
