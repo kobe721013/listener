@@ -108,23 +108,23 @@ loop do
 			para = msg.split(',')
 			
 			if(para[0] == "0800")
-			{
+			
 
 				response = case
 					when para.length != logonReq.length 
-						then "0810,2,e1,logon parameter count was #{para.length},CMDEND"
+						then "0810,1,e1:logon parameter count was #{para.length},CMDEND"
 					when (para[logonReq[:dlType]] != "C" and para[logonReq[:dlType]] != "A")
-						then "0810,2,e2,logon [download type] was not A or C,CMDEND"
+						then "0810,1,e2:logon [download type] was not A or C,CMDEND"
 					when (bankRow=bankData.select{|row| row["Bank_ID"].to_i==para[logonReq[:bankID]].to_i}.empty?)
-						then "0810,2,e3,logon request Bank ID(#{para[logonReq[:bankID]]}) was not support"
+						then "0810,1,e3:logon request Bank ID(#{para[logonReq[:bankID]]}) was not support,CMDEND"
 					
 					when File.directory?("#{rootDirectory}/#{para[logonReq[:bankID]]}/#{para[logonReq[:MID]]}/#{para[logonReq[:TID]]}")==false
-						then "0810,2,e4,logon request TID(#{para[logonReq[:TID]]}) or MID(#{para[logonReq[:MID]]}) maybe wrong,directory not existed"
+						then "0810,1,e4:logon request TID(#{para[logonReq[:TID]]}) or MID(#{para[logonReq[:MID]]}) maybe wrong,directory not existed,CMDEND"
 					else
 					"0810,6,00,#{para[logonReq[:traceNum]]},#{t.strftime("%Y%m%d%H%M%S")},#{bankRow[:Bank_ID]},#{bankRow[:PassWord]},/home/TMS/#{para[logonReq[:bankID]]}/#{para[logonReq[:MID]]}/#{para[logonReq[:TID]]}"
 					queue << "insert into event (DateTime,Success,Bank_ID,TID,MID,SN,DownLoad_Type) values('#{t.strftime("%Y%m%d%H%M%S")}',0,'#{bankRow[:PassWord]}','#{para[logonReq[:TID]]}','#{para[logonReq[:MID]]}','#{para[logonReq[:SN]]}','#{para[logonReq[:dlType]]}')"	
 				end
-            }
+            
 			end            
             client.puts response
 
