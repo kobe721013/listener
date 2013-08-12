@@ -40,7 +40,7 @@ t=Time.new
 puts "now Time (#{t.strftime("%Y%m%d%H%M%S")})"
 
 s=case
- when File.directory?("/home/kobe/projects/") == false
+ when File.exist?("/home/822/000822018880001/26001234/") == false
 	then "not exit"
 else
 	"exists"

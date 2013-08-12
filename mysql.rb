@@ -32,11 +32,14 @@ begin
 	
 
 	puts "#{(tmp=array.select{|row| row["Bank_ID"].to_i=="0999".to_i}).empty?}, tmp(#{tmp})"
+	
+	result=array.select{|row| row["Bank_ID"].to_i=="0999".to_i}
+	puts "result.class#{result.class}"
 	response = case
-		when(result=array.select{|row| row["Bank_ID"].to_i=="0999".to_i}.empty?)
+		when(result.empty?)
 			puts "null"
 		else
-			puts result
+			puts "#{result[0]["PassWord"]}111"
 	end
 	#puts "#{array.select{|row| row["Bank_ID"].to_i=="0999".to_i}}"
 
