@@ -46,3 +46,13 @@ else
 	"exists"
 end
 puts s
+
+
+hash={:a=>"A",:b=>"B"}
+hash.each {|a,b| p a}
+
+p "a \n b"
+
+
+
+puts "#{ARGV[0]}"
