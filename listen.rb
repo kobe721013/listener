@@ -48,10 +48,7 @@ threadMySQL=Thread.new{
 				con = Mysql.new 'localhost', 'root', '123456', 'Listen'	
 				loop do
 					unless queue.empty?()
-						sqlmsg=queue.pop
-						puts sqlmsg
-						rs=con.query(sqlmsg)
-						puts "rs(#{rs})"
+						rs=con.query(queue.pop)
 						sleep(0.5)
 					else
 						break
